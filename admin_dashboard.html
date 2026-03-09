@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — College Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/admin_dashboard.css">
+</head>
+
+<body>
+    <div class="dashboard-wrapper">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <span>Library Admin</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-th-large"></i><span>Dashboard</span>
+                </a>
+
+                <div class="nav-group-label">Books</div>
+                <a href="#" class="nav-item" data-section="add-offline">
+                    <i class="fas fa-book"></i><span>Add Offline Book</span>
+                </a>
+                <a href="#" class="nav-item" data-section="add-online"><i class="fas fa-desktop"></i>
+                    <span>Add Online Book</span></a>
+                <a href="#" class="nav-item" data-section="manage-books"><i class="fas fa-book-reader"></i>
+                    <span>Manage Books</span></a>
+
+                <div class="nav-group-label">Students</div>
+                <a href="#" class="nav-item" data-section="approve-students">
+                    <i class="fas fa-user-check"></i><span>Approve Students</span>
+                </a>
+                <a href="#" class="nav-item" data-section="book-requests">
+                    <i class="fas fa-hand-holding-heart"></i><span>Book Requests</span>
+                </a>
+                <a href="#" class="nav-item" data-section="issue-books">
+                    <i class="fas fa-book-reader"></i><span>Issue Books</span>
+                </a>
+                <a href="#" class="nav-item" data-section="issued-list">
+                    <i class="fas fa-list-alt"></i><span>Currently Issued</span>
+                </a>
+
+                <div class="nav-group-label">Finance</div>
+                <a href="#" class="nav-item" data-section="fines">
+                    <i class="fas fa-coins"></i><span>Fine Management</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="./api/logout.php" class="nav-item logout-item">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN ===== -->
+        <main class="main-content">
+
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="top-bar-title" id="pageTitle">Dashboard</h1>
+                    <p class="top-bar-sub">College Library Management System</p>
+                </div>
+                <div class="admin-badge"><i class="fas fa-shield-alt"></i> Admin</div>
+            </div>
+
+            <!-- ===== SECTION: DASHBOARD ===== -->
+            <div id="section-dashboard" class="page-section active">
+                <!-- Stats -->
+                <div class="stats-row">
+                    <div class="stat-card blue">
+                        <div class="stat-info">
+                            <p>Total Students</p>
+                            <h2 id="statStudents">—</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    </div>
+                    <div class="stat-card gold">
+                        <div class="stat-info">
+                            <p>Pending Approvals</p>
+                            <h2 id="statPending">—</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-info">
+                            <p>Books Issued</p>
+                            <h2 id="statIssued">—</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-book-reader"></i></div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-info">
+                            <p>Pending Fines</p>
+                            <h2 id="statFines">—</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    </div>
+                </div>
+
+                <!-- Recent Pending Students -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-user-clock"></i>
+                        <h2>Pending Student Registrations</h2>
+                        <span class="badge-pill" id="pendingBadge">0</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Roll No</th>
+                                    <th>Department</th>
+                                    <th>Semester</th>
+                                    <th>Registered</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-students-body">
+                                <tr>
+                                    <td colspan="6" class="empty-row">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: ADD OFFLINE BOOK ===== -->
+            <div id="section-add-offline" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-book"></i>
+                        <h2>Add Offline Book</h2>
+                    </div>
+                    <p class="section-desc">Add a new physical book to the library collection.</p>
+                    <form class="admin-form" id="addOfflineForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Book Title <span class="req">*</span></label>
+                                <input type="text" name="title" placeholder="Enter book title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Author <span class="req">*</span></label>
+                                <input type="text" name="author" placeholder="Enter author name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <input type="text" name="category" placeholder="e.g. Computer Science">
+                            </div>
+                            <div class="form-group">
+                                <label>Book id</label>
+                                <input type="text" name="isbn" placeholder="e.g. 978-0-13-468599-1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Total Copies <span class="req">*</span></label>
+                                <input type="number" name="total_copies" placeholder="e.g. 5" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Availability</label>
+                                <select name="availability">
+                                    <option value="available">Available</option>
+                                    <option value="unavailable">Unavailable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-rows">
+                            <div class="form-group full-width">
+                                <label>Shelf Location</label>
+                                <input type="text" name="shelf_location" placeholder="e.g. Section A, Row 3">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Book Cover Image</label>
+                            <div class="img-upload-wrap" id="offlineImgWrap">
+                                <div class="img-upload-preview" id="offlineImgPreview">
+                                    <i class="fas fa-image"></i>
+                                    <span>Click to upload cover image</span>
+                                </div>
+                                <input type="file" name="book_image" accept="image/*" id="offlineImgInput"
+                                    class="img-upload-input">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Description</label>
+                            <textarea name="description" rows="3" placeholder="Short book description..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-blue btn-lg">
+                                <i class="fas fa-plus-circle"></i> Add Offline Book
+                            </button>
+                        </div>
+                        <div id="offlineBookMsg" class="form-msg hidden"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: ADD ONLINE BOOK ===== -->
+            <div id="section-add-online" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-desktop"></i>
+                        <h2>Add Online Book / eBook</h2>
+                    </div>
+                    <p class="section-desc">Add a new digital book or PDF to the library's online collection.</p>
+                    <form class="admin-form" id="addOnlineForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Book Title <span class="req">*</span></label>
+                                <input type="text" name="title" placeholder="Enter book title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Author <span class="req">*</span></label>
+                                <input type="text" name="author" placeholder="Enter author name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <input type="text" name="category" placeholder="e.g. Mathematics">
+                            </div>
+                            <div class="form-group">
+                                <label>File Type</label>
+                                <select name="file_type">
+                                    <option value="PDF">PDF</option>
+                                    <option value="Notes">Notes</option>
+                                    <option value="eBook">eBook</option>
+                                    <option value="Video">Video</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Upload Book File (PDF, DOC, etc.) <span class="req">*</span></label>
+                            <input type="file" name="book_file" class="form-control" style="padding: 10px;"
+                                accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Book Cover Image</label>
+                            <div class="img-upload-wrap" id="onlineImgWrap">
+                                <div class="img-upload-preview" id="onlineImgPreview">
+                                    <i class="fas fa-image"></i>
+                                    <span>Click to upload cover image</span>
+                                </div>
+                                <input type="file" name="book_image" accept="image/*" id="onlineImgInput"
+                                    class="img-upload-input">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Description</label>
+                            <textarea name="description" rows="3" placeholder="Short book description..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-blue btn-lg">
+                                <i class="fas fa-plus-circle"></i> Add Online Book
+                            </button>
+                        </div>
+                        <div id="onlineBookMsg" class="form-msg hidden"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: MANAGE BOOKS ===== -->
+            <div id="section-manage-books" class="page-section">
+                <div class="section-card">
+                    <div class="section-header" style="justify-content: space-between;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-book-reader"></i>
+                            <h2>Manage Books</h2>
+                        </div>
+                        <div class="tab-buttons" style="display:flex; gap:10px;">
+                            <button class="btn btn-blue btn-sm" id="btnFilterOffline">Offline Books</button>
+                            <button class="btn btn-outline-blue btn-sm" id="btnFilterOnline">Online Books</button>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr No</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Category</th>
+                                    <th>ISBN No</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manageBooksBody">
+                                <tr>
+                                    <td colspan="6" class="empty-row">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: APPROVE STUDENTS ===== -->
+            <div id="section-approve-students" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-user-check"></i>
+                        <h2>Approve Student Registrations</h2>
+                        <span class="badge-pill" id="approvalBadge">0</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Roll No</th>
+                                    <th>Department</th>
+                                    <th>Semester</th>
+                                    <th>Registered</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="approve-students-body">
+                                <tr>
+                                    <td colspan="6" class="empty-row">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: BOOK REQUESTS ===== -->
+            <div id="section-book-requests" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h2>Review Book Requests</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Book Title</th>
+                                    <th>Author</th>
+                                    <th>Type</th>
+                                    <th>Requested On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookRequestsBody">
+                                <tr>
+                                    <td colspan="6" class="empty-row">No book requests found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: ISSUE BOOKS ===== -->
+            <div id="section-issue-books" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-book-reader"></i>
+                        <h2>Issue Books</h2>
+                    </div>
+                    <p class="section-desc">Issue a physical book to a student or mark a book as returned.</p>
+
+                    <!-- Issue Form -->
+                    <div class="sub-card">
+                        <h3 class="sub-title"><i class="fas fa-plus"></i> Issue a Book</h3>
+                        <form class="admin-form" id="issueBookForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Student Roll No <span class="req">*</span></label>
+                                    <input type="text" name="roll_no" placeholder="e.g. 2024CS001" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Book Title <span class="req">*</span></label>
+                                    <input type="text" name="book_title" placeholder="Enter book title" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Book id</label>
+                                    <input type="text" name="isbn" placeholder="e.g. 978-0-13-468599-1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Issue Date <span class="req">*</span></label>
+                                    <input type="date" name="issue_date" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Due Date <span class="req">*</span></label>
+                                    <input type="date" name="due_date" required>
+                                </div>
+                                <div class="form-group"></div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-blue btn-lg">
+                                    <i class="fas fa-paper-plane"></i> Issue Book
+                                </button>
+                            </div>
+                            <div id="issueBookMsg" class="form-msg hidden"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: CURRENTLY ISSUED BOOKS (dedicated) ===== -->
+            <div id="section-issued-list" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-list-alt"></i>
+                        <h2>Currently Issued Books</h2>
+                    </div>
+                    <p class="section-desc">View all books currently issued to students.</p>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Roll No</th>
+                                    <th>Book</th>
+                                    <th>Book id</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="issuedListBody">
+                                <tr>
+                                    <td colspan="8" class="empty-row">No issued books found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: FINE MANAGEMENT ===== -->
+            <div id="section-fines" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-coins"></i>
+                        <h2>Fine Management</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Book</th>
+                                    <th>Days Overdue</th>
+                                    <th>Fine Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finesBody">
+                                <tr>
+                                    <td colspan="6" class="empty-row">No fines found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const SECTION_TITLES = {
+            'dashboard': 'Dashboard',
+            'add-offline': 'Add Offline Book',
+            'add-online': 'Add Online Book',
+            'manage-books': 'Manage Books',
+            'approve-students': 'Approve Students',
+            'book-requests': 'Book Requests',
+            'issue-books': 'Issue Books',
+            'issued-list': 'Currently Issued Books',
+            'fines': 'Fine Management'
+        };
+
+        // ---- INIT ----
+        document.addEventListener('DOMContentLoaded', () => {
+            initNav();
+            fetchPendingStudents('pending-students-body', 'pendingBadge', 'statPending');
+            setTodayDates();
+            initForms();
+
+            // Setup filters for manage books page
+            document.getElementById('btnFilterOffline').addEventListener('click', () => fetchAdminBooks('offline'));
+            document.getElementById('btnFilterOnline').addEventListener('click', () => fetchAdminBooks('online'));
+        });
+
+        // ---- NAVIGATION ----
+        function initNav() {
+            document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+                item.addEventListener('click', e => {
+                    e.preventDefault();
+                    navigateTo(item.dataset.section);
+                });
+            });
+        }
+
+        function navigateTo(section) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const nav = document.querySelector(`.nav-item[data-section="${section}"]`);
+            if (nav) nav.classList.add('active');
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            const el = document.getElementById(`section-${section}`);
+            if (el) el.classList.add('active');
+            document.getElementById('pageTitle').textContent = SECTION_TITLES[section] || section;
+
+            // Lazy-load sections
+            if (section === 'approve-students') {
+                fetchPendingStudents('approve-students-body', 'approvalBadge', null);
+            } else if (section === 'manage-books') {
+                fetchAdminBooks('offline'); // default load offline
+            }
+        }
+
+        // ---- FETCH PENDING STUDENTS ----
+        async function fetchPendingStudents(tbodyId, badgeId, statId) {
+            const tbody = document.getElementById(tbodyId);
+            if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty-row">Loading...</td></tr>';
+            try {
+                const res = await fetch('./api/admin_get_pending.php');
+                const result = await res.json();
+                if (res.status === 403) { window.location.href = './login.html'; return; }
+                if (result.success) {
+                    renderPendingTable(result.data.students, tbodyId, badgeId, statId);
+                } else {
+                    if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="empty-row">Error: ${result.message}</td></tr>`;
+                }
+            } catch (e) {
+                if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty-row">Network error.</td></tr>';
+            }
+        }
+
+        function renderPendingTable(students, tbodyId, badgeId, statId) {
+            const tbody = document.getElementById(tbodyId);
+            const badge = document.getElementById(badgeId);
+            if (badge) badge.textContent = students.length;
+            if (statId) { const s = document.getElementById(statId); if (s) s.textContent = students.length; }
+            if (!students.length) {
+                if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty-row">No pending registrations.</td></tr>';
+                return;
+            }
+            if (tbody) tbody.innerHTML = students.map(s => `
+            <tr>
+                <td>
+                    <div style="font-weight:600;">${esc(s.first_name)} ${esc(s.last_name)}</div>
+                    <div style="font-size:12px;color:var(--muted);">${esc(s.email)}</div>
+                </td>
+                <td>${esc(s.roll_no)}</td>
+                <td>${esc(s.department)}</td>
+                <td>Sem ${esc(s.semester)}</td>
+                <td>${new Date(s.created_at).toLocaleDateString()}</td>
+                <td>
+                    <button class="btn btn-approve" onclick="updateStatus(${s.id},'approved','${tbodyId}','${badgeId}')">
+                        <i class="fas fa-check"></i> Approve
+                    </button>
+                    <button class="btn btn-decline" onclick="updateStatus(${s.id},'declined','${tbodyId}','${badgeId}')">
+                        <i class="fas fa-times"></i> Decline
+                    </button>
+                </td>
+            </tr>`).join('');
+        }
+
+        async function updateStatus(id, status, tbodyId, badgeId) {
+            if (!confirm(`${status === 'approved' ? 'Approve' : 'Decline'} this student?`)) return;
+            const fd = new FormData();
+            fd.append('student_id', id);
+            fd.append('status', status);
+            try {
+                const res = await fetch('./api/admin_update_status.php', { method: 'POST', body: fd });
+                const result = await res.json();
+                if (result.success) {
+                    fetchPendingStudents(tbodyId, badgeId, tbodyId === 'pending-students-body' ? 'statPending' : null);
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (e) { alert('Network error.'); }
+        }
+
+        // ---- SET TODAY DATES ----
+        function setTodayDates() {
+            const today = new Date().toISOString().split('T')[0];
+            const issueDate = document.querySelector('#issueBookForm [name="issue_date"]');
+            if (issueDate) issueDate.value = today;
+        }
+
+        // ---- FORM SUBMISSIONS ----
+        function initForms() {
+            // Image upload previews
+            initImgUpload('offlineImgWrap', 'offlineImgInput', 'offlineImgPreview');
+            initImgUpload('onlineImgWrap', 'onlineImgInput', 'onlineImgPreview');
+
+            // Add Offline Book
+            document.getElementById('addOfflineForm').addEventListener('submit', async e => {
+                e.preventDefault();
+                await submitForm('addOfflineForm', './api/add_offline_book.php', 'offlineBookMsg');
+                resetImgPreview('offlineImgPreview');
+            });
+
+            // Add Online Book
+            document.getElementById('addOnlineForm').addEventListener('submit', async e => {
+                e.preventDefault();
+                await submitForm('addOnlineForm', './api/add_online_book.php', 'onlineBookMsg');
+                resetImgPreview('onlineImgPreview');
+            });
+
+            // Issue Book
+            document.getElementById('issueBookForm').addEventListener('submit', async e => {
+                e.preventDefault();
+                showMsg('issueBookMsg', 'success', '✅ Book issued successfully (feature coming soon).');
+                document.getElementById('issueBookForm').reset();
+                setTodayDates();
+            });
+        }
+
+        // ---- IMAGE UPLOAD PREVIEW ----
+        function initImgUpload(wrapId, inputId, previewId) {
+            const wrap = document.getElementById(wrapId);
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            if (!wrap || !input || !preview) return;
+
+            // Click on the preview area triggers file picker
+            preview.addEventListener('click', () => input.click());
+
+            input.addEventListener('change', () => {
+                const file = input.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select a valid image file.');
+                    input.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Book cover preview">
+                        <span class="img-preview-change"><i class="fas fa-camera"></i> Change</span>`;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function resetImgPreview(previewId) {
+            const preview = document.getElementById(previewId);
+            if (preview) preview.innerHTML = '<i class="fas fa-image"></i><span>Click to upload cover image</span>';
+        }
+
+        async function submitForm(formId, endpoint, msgId) {
+            const form = document.getElementById(formId);
+            const btn = form.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            try {
+                const res = await fetch(endpoint, { method: 'POST', body: new FormData(form) });
+                const result = await res.json();
+                if (result.success) {
+                    showMsg(msgId, 'success', '✅ ' + result.message);
+                    form.reset();
+                } else {
+                    showMsg(msgId, 'error', '❌ ' + result.message);
+                }
+            } catch (e) {
+                showMsg(msgId, 'error', '❌ Network error. Please try again.');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function showMsg(id, type, text) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.className = `form-msg ${type}`;
+            el.textContent = text;
+            setTimeout(() => { el.className = 'form-msg hidden'; }, 5000);
+        }
+
+        function esc(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // ---- ADMIN MANAGE BOOKS ----
+        let currentAdminBookType = 'offline';
+
+        async function fetchAdminBooks(type) {
+            currentAdminBookType = type;
+            const tbody = document.getElementById('manageBooksBody');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty-row"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+
+            // Toggle active style on buttons
+            document.getElementById('btnFilterOffline').className = type === 'offline' ? 'btn btn-blue btn-sm' : 'btn btn-outline-blue btn-sm';
+            document.getElementById('btnFilterOnline').className = type === 'online' ? 'btn btn-blue btn-sm' : 'btn btn-outline-blue btn-sm';
+
+            try {
+                const endpoint = type === 'offline' ? './api/get_offline_books.php' : './api/get_online_books.php';
+                const res = await fetch(endpoint);
+                const result = await res.json();
+
+                if (!result.success || !result.data.length) {
+                    if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="empty-row">No ${type} books found.</td></tr>`;
+                    return;
+                }
+
+                if (tbody) {
+                    window.adminManageBooksList = result.data; // Store globally for edit modal
+                    tbody.innerHTML = result.data.map((book, index) => {
+                        const id = book.id || book.book_id || 'N/A';
+                        const title = book.title || book.book_name || book.name || 'Untitled';
+                        const author = book.author || book.book_author || book.writer || 'Unknown Author';
+                        const category = book.category || book.subject || book.genre || 'General';
+                        const isbn = book.isbn || '-';
+                        const totalCopies = book.total_copies || book.quantity || 1;
+
+                        // Handle availability boolean/string
+                        const availRaw = String(book.availability || book.status || '1');
+                        const isAvail = /avail|yes|1|true/i.test(availRaw);
+
+                        return `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td><div style="font-weight:600;">${esc(title)}</div></td>
+                            <td>${esc(author)}</td>
+                            <td><span class="badge-tag">${esc(category)}</span></td>
+                            <td>${esc(isbn)}</td>
+                            <td>
+                                <div style="display:flex; gap:10px;">
+                                    <button class="btn btn-blue btn-sm" onclick="editAdminBook(${index}, '${type}')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-decline btn-sm" onclick="deleteAdminBook(${id}, '${type}')">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    }).join('');
+                }
+            } catch (e) {
+                if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty-row">❌ Network error.</td></tr>';
+            }
+        }
+
+        async function deleteAdminBook(id, type) {
+            if (!confirm(`Are you sure you want to permanently delete this ${type} book?`)) return;
+
+            try {
+                const fd = new FormData();
+                fd.append('book_id', id);
+                fd.append('book_type', type); // 'offline' or 'online'
+
+                const res = await fetch('./api/delete_book.php', { method: 'POST', body: fd });
+                const result = await res.json();
+
+                if (result.success) {
+                    showMsg('onlineBookMsg', 'success', '✅ ' + result.message); // Using existing msg box or alert below
+                    alert('✅ ' + result.message);
+                    fetchAdminBooks(type); // Refresh list
+                } else {
+                    alert('❌ Failed to delete: ' + result.message);
+                }
+            } catch (e) {
+                alert('❌ Network error occurred while deleting.');
+            }
+        }
+
+        async function toggleBookAvailability(id, type, isChecked) {
+            try {
+                const fd = new FormData();
+                fd.append('book_id', id);
+                fd.append('book_type', type);
+                fd.append('status', isChecked ? '1' : '0');
+
+                const res = await fetch('./api/toggle_book_availability.php', { method: 'POST', body: fd });
+                const result = await res.json();
+
+                if (!result.success) {
+                    alert('❌ Failed to update availability: ' + result.message);
+                    fetchAdminBooks(type); // Revert switch visually on failure
+                }
+            } catch (e) {
+                alert('❌ Network error updating status.');
+                fetchAdminBooks(type);
+            }
+        }
+
+        // ---- EDIT BOOK MODAL CONTROLS ----
+        function editAdminBook(index, type) {
+            const book = window.adminManageBooksList[index];
+            if (!book) return;
+
+            const modal = document.getElementById('editBookModal');
+
+            // Populate form fields
+            document.getElementById('editBookType').value = type;
+            document.getElementById('editBookId').value = book.id || book.book_id;
+
+            document.getElementById('editTitle').value = book.title || book.book_name || book.name || '';
+            document.getElementById('editAuthor').value = book.author || book.book_author || book.writer || '';
+            document.getElementById('editCategory').value = book.category || book.subject || book.genre || '';
+            document.getElementById('editIsbn').value = book.isbn || '';
+            document.getElementById('editTotalCopies').value = book.total_copies || book.quantity || 1;
+
+            // Availability
+            const availRaw = String(book.availability || book.status || '1');
+            const isAvail = /available|yes|1|true/i.test(availRaw);
+            document.getElementById('editAvailability').value = isAvail ? '1' : '0';
+
+            document.getElementById('editDescription').value = book.description || book.summary || '';
+
+            // Show fields based on type
+            if (type === 'offline') {
+                document.getElementById('editShelfWrap').style.display = 'block';
+                document.getElementById('editShelf').value = book.shelf_location || book.shelf || '';
+            } else {
+                document.getElementById('editShelfWrap').style.display = 'none';
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editBookModal').style.display = 'none';
+        }
+
+        // Handle Edit Form Submission
+        document.addEventListener('DOMContentLoaded', () => {
+            const editForm = document.getElementById('editBookForm');
+            if (editForm) {
+                editForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const form = e.target;
+                    const btn = form.querySelector('button[type="submit"]');
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                    btn.disabled = true;
+
+                    try {
+                        const res = await fetch('./api/edit_book.php', { method: 'POST', body: new FormData(form) });
+
+                        if (!res.ok) {
+                            const errText = await res.text();
+                            alert('❌ Server error (' + res.status + '): ' + errText.substring(0, 100));
+                            return;
+                        }
+
+                        let result;
+                        try {
+                            result = await res.json();
+                        } catch (parseErr) {
+                            const rawText = await res.clone().text(); // Clone to read text if json failed
+                            console.error("Invalid JSON:", rawText);
+                            alert("❌ Invalid Server Response. See console.");
+                            return;
+                        }
+
+                        if (result.success) {
+                            alert('✅ Book updated successfully!');
+                            closeEditModal();
+                            fetchAdminBooks(currentAdminBookType); // Refresh
+                        } else {
+                            alert('❌ Failed to update: ' + result.message);
+                        }
+                    } catch (error) {
+                        alert('❌ Network error saving book: ' + error.message);
+                    } finally {
+                        btn.innerHTML = 'Save Changes';
+                        btn.disabled = false;
+                    }
+                });
+            }
+        });
+
+        // --- SESSION TIMEOUT CHECKER ---
+        // Poll the server every 60 seconds to see if the session has expired due to 5 hours of inactivity
+        setInterval(async () => {
+            try {
+                const res = await fetch('./api/check_session.php');
+                if (res.status === 401) {
+                    alert('⏳ Your admin session has expired due to 5 hours of inactivity. Please log in again for security.');
+                    window.location.href = './login.html'; // Redirect to login
+                }
+            } catch (err) {
+                // Ignore silent network failures for background tasks
+                console.error("Session check failed:", err);
+            }
+        }, 60000);
+
+    </script>
+
+    <!-- Edit Book Modal -->
+    <div id="editBookModal"
+        style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+        <div
+            style="background:white; border-radius:12px; width:90%; max-width:600px; padding:25px; box-shadow:0 10px 25px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto; position:relative;">
+            <span onclick="closeEditModal()"
+                style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:20px; color:#666;"><i
+                    class="fas fa-times"></i></span>
+
+            <h2 style="margin-bottom:20px; color:var(--text-dark); border-bottom:1px solid #eee; padding-bottom:10px;">
+                <i class="fas fa-edit"></i> Edit Book Details
+            </h2>
+
+            <form id="editBookForm">
+                <input type="hidden" id="editBookId" name="book_id">
+                <input type="hidden" id="editBookType" name="book_type">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Book Title <span class="req">*</span></label>
+                        <input type="text" id="editTitle" name="title" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Author / Writer <span class="req">*</span></label>
+                        <input type="text" id="editAuthor" name="author" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category / Subject <span class="req">*</span></label>
+                        <input type="text" id="editCategory" name="category" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ISBN No <span class="req">*</span></label>
+                        <input type="text" id="editIsbn" name="isbn" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Availability / Status</label>
+                        <select id="editAvailability" name="availability" class="form-control">
+                            <option value="1">Available (1)</option>
+                            <option value="0">Issued / Unavailable (0)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Total Copies</label>
+                        <input type="number" id="editTotalCopies" name="total_copies" class="form-control" min="1">
+                    </div>
+                    <div class="form-group" id="editShelfWrap" style="display:none;">
+                        <label>Shelf No (Offline only)</label>
+                        <input type="text" id="editShelf" name="shelf_location" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label>Description</label>
+                        <textarea id="editDescription" name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+                    <button type="button" class="btn btn-outline-blue" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-blue">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

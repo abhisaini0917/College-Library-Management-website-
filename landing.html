@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Library - Your Gateway to Knowledge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/landing.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">📚</div>
+                <span>College Library</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" onclick="handleStatusCheck(event)" style="color:var(--blue);">Check Status</a></li>
+                <li><button class="login-btn" onclick="handleLogin()">Login</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>
+                    Welcome to Your
+                    <span class="highlight">College Library</span>
+                </h1>
+                <p>
+                    Your gateway to knowledge, learning, and academic excellence.
+                    Explore thousands of books, digital resources, and study spaces designed for your success.
+                </p>
+
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <h3>15,000+</h3>
+                        <p>Books Available</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>3,000+</h3>
+                        <p>E-Resources</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>200+</h3>
+                        <p>Study Seats</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="library-card">
+                    <div class="library-hours">
+                        <h3>📅 Library Hours</h3>
+                        <div class="hours-list">
+                            <div class="hours-item">
+                                <span>Monday - Friday</span>
+                                <span>9:00 AM - 5:00 PM</span>
+                            </div>
+                            <div class="hours-item">
+                                <span>Online</span>
+                                <span>24/7 Available</span>
+                            </div>
+                            <div class="hours-item">
+                                <span>Saturday & Sunday</span>
+                                <span>Closed</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-links">
+                        <a href="#catalog" class="quick-link">📖 Engineering</a>
+                        <a href="#ebooks" class="quick-link">💻 E-Books</a>
+                        <a href="#journals" class="quick-link">📰 Journals</a>
+                        <a href="#study" class="quick-link">🎓 Academic</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <h2>Library Services</h2>
+            <p>Comprehensive services to support your academic journey</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">📚</div>
+                <h3>Book Borrowing</h3>
+                <p>Borrow physical books with flexible loan periods. Easy check-in and check-out process with your
+                    student ID.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>Digital Library</h3>
+                <p>Access thousands of e-books, journals, and research papers online 24/7 from anywhere on campus or
+                    home.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🔍</div>
+                <h3>Research Assistance</h3>
+                <p>Get help from our librarians for research projects, citations, and finding the right resources for
+                    your studies.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">📖</div>
+                <h3>Reading Rooms</h3>
+                <p>Quiet study spaces with comfortable seating, good lighting, and a peaceful environment for focused
+                    learning.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🖨️</div>
+                <h3>Print & Scan</h3>
+                <p>Printing, photocopying, and scanning facilities available at affordable rates for all students.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🎯</div>
+                <h3>Reference Services</h3>
+                <p>Access reference books, encyclopedias, dictionaries, and specialized subject resources for quick
+                    information.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources" id="resources">
+        <div class="resources-container">
+            <div class="section-header">
+                <h2>Library Resources</h2>
+                <p>Explore our comprehensive collection of academic resources</p>
+            </div>
+
+            <div class="resources-grid">
+                <div class="resource-category">
+                    <h3>
+                        <div class="resource-icon">📚</div>
+                        Physical Collection
+                    </h3>
+                    <ul class="resource-list">
+                        <li>Textbooks & Reference Books</li>
+                        <li>Fiction & Non-Fiction</li>
+                        <li>Magazines & Newspapers</li>
+                        <li>Theses & Dissertations</li>
+                        <li>Research Reports</li>
+                    </ul>
+                </div>
+
+                <div class="resource-category">
+                    <h3>
+                        <div class="resource-icon">💻</div>
+                        Digital Resources
+                    </h3>
+                    <ul class="resource-list">
+                        <li>E-Books & E-Journals</li>
+                        <li>Online Databases</li>
+                        <li>Video Lectures</li>
+                        <li>Research Papers</li>
+                        <li>Digital Archives</li>
+                    </ul>
+                </div>
+
+                <div class="resource-category">
+                    <h3>
+                        <div class="resource-icon">🎓</div>
+                        Academic Support
+                    </h3>
+                    <ul class="resource-list">
+                        <li>Study Materials</li>
+                        <li>Previous Year Papers</li>
+                        <li>Competitive Exam Books</li>
+                        <li>Language Learning</li>
+                        <li>Skill Development</li>
+                    </ul>
+                </div>
+
+                <div class="resource-category">
+                    <h3>
+                        <div class="resource-icon">🔬</div>
+                        Subject Collections
+                    </h3>
+                    <ul class="resource-list">
+                        <li>Engineering & Technology</li>
+                        <li>Science & Mathematics</li>
+                        <li>Arts & Humanities</li>
+                        <li>Commerce & Management</li>
+                        <li>Medical & Health Sciences</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Get in Touch</h2>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📍</div>
+                        <div class="contact-item-text">
+                            <h4>Address</h4>
+                            <p>SGTBSJ Govt. Polytechnic, Ambala City<br>Haryana, India 134003</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📞</div>
+                        <div class="contact-item-text">
+                            <h4>Phone</h4>
+                            <p>+91 123-456-7890</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">✉️</div>
+                        <div class="contact-item-text">
+                            <h4>Email</h4>
+                            <p>library@gpambala.in</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">🕐</div>
+                        <div class="contact-item-text">
+                            <h4>Working Hours</h4>
+                            <p>Mon-Fri: 9 AM - 5 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-placeholder">
+                🗺️
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <h3>College Library</h3>
+                <p>Empowering students with knowledge and resources for academic excellence. Your trusted partner in
+                    learning and research.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#catalog">Catalog Search</a></li>
+                    <li><a href="#" onclick="handleStatusCheck(event)">Check Reg Status</a></li>
+                    <li><a href="#ebooks">E-Resources</a></li>
+                    <li><a href="#services">Services</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#newbooks">New Arrivals</a></li>
+                    <li><a href="#journals">Journals</a></li>
+                    <li><a href="#databases">Databases</a></li>
+                    <li><a href="#thesis">Thesis Archive</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Help</h4>
+                <ul>
+                    <li><a href="#faq">FAQs</a></li>
+                    <li><a href="#guide">User Guide</a></li>
+                    <li><a href="#rules">Library Rules</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <d class="footer-bottom">
+            <p>&copy; 2026 College Library. All rights reserved.</p>
+            </div>
+    </footer>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeLoginModal()">✕</button>
+            <iframe src="./login.html" class="modal-iframe" id="loginFrame"></iframe>
+        </div>
+    </div>
+
+    <!-- Status Check Modal -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal-container" style="max-height: 80vh;">
+            <button class="modal-close" onclick="closeStatusModal()">✕</button>
+            <iframe src="./status_check.html" class="modal-iframe" id="statusFrame" style="height: 500px;"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin() {
+            // Open the login modal
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('active');
+        }
+
+        function closeLoginModal() {
+            // Close the login modal
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('active');
+        }
+
+        function handleStatusCheck(e) {
+            e.preventDefault();
+            const modal = document.getElementById('statusModal');
+            modal.classList.add('active');
+        }
+
+        function closeStatusModal() {
+            const modal = document.getElementById('statusModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginModal = document.getElementById('loginModal');
+            const statusModal = document.getElementById('statusModal');
+
+            document.addEventListener('click', function (e) {
+                if (e.target === loginModal) {
+                    closeLoginModal();
+                }
+                if (e.target === statusModal) {
+                    closeStatusModal();
+                }
+            });
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeLoginModal();
+                closeStatusModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

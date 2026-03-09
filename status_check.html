@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Registration Status — College Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/status_check.css">
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Check Status 🔎</div>
+            <div class="card-subtitle">Track your registration application</div>
+        </div>
+
+        <div class="input-wrap">
+            <label for="roll_no">Enter your Roll Number</label>
+            <input type="text" id="roll_no" placeholder="e.g. CSE2024001"
+                onkeydown="if(event.key==='Enter') checkStatus()">
+        </div>
+
+        <button class="btn-primary" id="submitBtn" onclick="checkStatus()">
+            Check Status 🚀
+        </button>
+
+        <div id="errorText" class="error-text"></div>
+
+        <div id="resultBox" class="result-box">
+            <div class="result-icon" id="resultIcon">⏱️</div>
+            <div class="result-title" id="resultTitle">Status Pending</div>
+            <div class="result-desc" id="resultDesc">Your account is waiting for admin approval.</div>
+        </div>
+
+        <a href="./landing.html" class="back-link">← Back to Home</a>
+    </div>
+
+    <script>
+        // Check if roll_no is in URL parameters on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const rollParam = params.get('roll_no');
+            if (rollParam) {
+                document.getElementById('roll_no').value = rollParam;
+                checkStatus();
+            }
+        });
+
+        // If in iframe modal, hide the back link to avoid double navigation UI
+        if (window !== window.top) {
+            document.querySelector('.back-link').style.display = 'none';
+        }
+
+        async function checkStatus() {
+            const rollInput = document.getElementById('roll_no');
+            const roll_no = rollInput.value.trim();
+            const btn = document.getElementById('submitBtn');
+            const errorText = document.getElementById('errorText');
+            const resultBox = document.getElementById('resultBox');
+
+            if (!roll_no) {
+                errorText.textContent = "Please enter your roll number.";
+                errorText.style.display = "block";
+                resultBox.style.display = "none";
+                rollInput.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "Checking...";
+            errorText.style.display = "none";
+            resultBox.style.display = "none";
+
+            try {
+                const formData = new FormData();
+                formData.append('roll_no', roll_no);
+
+                const response = await fetch('./api/check_status.php', { method: 'POST', body: formData });
+                const result = await response.json();
+
+                btn.disabled = false;
+                btn.textContent = "Check Status 🚀";
+
+                if (result.success) {
+                    showResult(result.data.status, result.data.first_name);
+                } else {
+                    errorText.textContent = result.message || "Registration not found.";
+                    errorText.style.display = "block";
+                }
+            } catch (error) {
+                btn.disabled = false;
+                btn.textContent = "Check Status 🚀";
+                errorText.textContent = "Network error occurred. Try again.";
+                errorText.style.display = "block";
+            }
+        }
+
+        function showResult(status, firstName) {
+            const resultBox = document.getElementById('resultBox');
+            const icon = document.getElementById('resultIcon');
+            const title = document.getElementById('resultTitle');
+            const desc = document.getElementById('resultDesc');
+
+            // Reset classes
+            resultBox.className = "result-box";
+
+            if (status === 'pending') {
+                resultBox.classList.add('pending');
+                icon.textContent = "⏱️";
+                title.textContent = "Approval Pending";
+                desc.innerHTML = `Hi <b>${firstName}</b>, your account is still waiting for an admin to approve it. Check back later!`;
+            } else if (status === 'approved') {
+                resultBox.classList.add('approved');
+                icon.textContent = "✅";
+                title.textContent = "Account Approved!";
+                desc.innerHTML = `Hi <b>${firstName}</b>, your account is active. You can <a href="./login.html" style="font-weight:800; color:#166534;">log in now</a>.`;
+            } else if (status === 'declined') {
+                resultBox.classList.add('declined');
+                icon.textContent = "❌";
+                title.textContent = "Registration Declined";
+                desc.innerHTML = `Hi <b>${firstName}</b>, unfortunately your registration request was declined by the admin.`;
+            }
+
+            resultBox.style.display = "block";
+        }
+    </script>
+</body>
+
+</html>

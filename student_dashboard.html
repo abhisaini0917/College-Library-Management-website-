@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard — College Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/student_dashboard.css">
+</head>
+
+<body>
+    <div class="dashboard-wrapper">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <span>Library</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="issued">
+                    <i class="fas fa-book"></i>
+                    <span>My Issued Books</span>
+                </a>
+                <a href="#" class="nav-item" data-section="offline">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Offline Books</span>
+                </a>
+                <a href="#" class="nav-item" data-section="request">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>Request Book</span>
+                </a>
+                <a href="#" class="nav-item" data-section="online">
+                    <i class="fas fa-desktop"></i>
+                    <span>Online Books</span>
+                </a>
+                <a href="#" class="nav-item" data-section="fines">
+                    <i class="fas fa-coins"></i>
+                    <span>Fines</span>
+                </a>
+                <a href="#" class="nav-item" data-section="profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="./api/logout.php" class="nav-item logout-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="main-content">
+
+            <!-- Welcome Header (always visible) -->
+            <div class="page-header">
+                <div class="welcome-info">
+                    <h1 id="welcomeName">Welcome, Student</h1>
+                    <p id="welcomeMeta">Department | Semester</p>
+                </div>
+                <div class="header-avatar" title="View Profile">
+                    <img id="profileAvatar"
+                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        alt="Student Profile"
+                        onerror="this.onerror=null; this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';">
+                    <div class="avatar-overlay"><i class="fas fa-user"></i></div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: DASHBOARD ===== -->
+            <div id="section-dashboard" class="page-section active">
+                <!-- Stats Cards -->
+                <div class="stats-row">
+                    <div class="stat-card blue">
+                        <div class="stat-info">
+                            <p>Issued Books</p>
+                            <h2 id="statIssued">0</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-book-reader"></i></div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-info">
+                            <p>Due Books</p>
+                            <h2 id="statDue">0</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-calendar-times"></i></div>
+                    </div>
+                    <div class="stat-card gold">
+                        <div class="stat-info">
+                            <p>Fines</p>
+                            <h2 id="statFines">₹0</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                    </div>
+                    <div class="stat-card light-blue">
+                        <div class="stat-info">
+                            <p>Available eBooks</p>
+                            <h2 id="statEbooks">0</h2>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-tablet-alt"></i></div>
+                    </div>
+                </div>
+
+                <!-- Offline Issued Books Table (summary on dashboard) -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-book"></i>
+                        <h2>Offline Issued Books</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Book Name</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="issuedBooksBody">
+                                <tr>
+                                    <td colspan="4" class="empty-row">No issued books found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Online eBooks -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-desktop"></i>
+                        <h2>Online eBooks</h2>
+                    </div>
+                    <div class="ebooks-grid">
+                        <div class="ebook-card">
+                            <div class="ebook-cover"><i class="fas fa-book"></i></div>
+                            <div class="ebook-info">
+                                <p>Operating System PDF</p>
+                                <button class="btn btn-blue">Read</button>
+                            </div>
+                        </div>
+                        <div class="ebook-card">
+                            <div class="ebook-cover"><i class="fas fa-book"></i></div>
+                            <div class="ebook-info">
+                                <p>DBMS Notes</p>
+                                <button class="btn btn-blue">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: MY ISSUED BOOKS ===== -->
+            <div id="section-issued" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-book"></i>
+                        <h2>My Issued Books</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Book Name</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="empty-row">No issued books found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: OFFLINE BOOKS ===== -->
+            <div id="section-offline" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-bookmark"></i>
+                        <h2>Offline Books</h2>
+                    </div>
+                    <p class="section-desc">Browse physical books available in the library.</p>
+                    <div class="books-icon-grid" id="offlineBooksGrid">
+                        <div class="books-loading"><i class="fas fa-spinner fa-spin"></i> Loading books...</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ===== SECTION: REQUEST BOOK ===== -->
+            <div id="section-request" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h2>Request a Book</h2>
+                    </div>
+                    <p class="section-desc">Fill in the details below to send a book request to the librarian.</p>
+                    <form class="request-form" id="requestBookForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reqBookTitle">Book Title <span class="required">*</span></label>
+                                <input type="text" id="reqBookTitle" placeholder="Enter book title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reqBookAuthor">Author Name</label>
+                                <input type="text" id="reqBookAuthor" placeholder="Enter author name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reqBookCategory">Category</label>
+                                <select id="reqBookCategory">
+                                    <option value="">Select category</option>
+                                    <option>Science</option>
+                                    <option>Technology</option>
+                                    <option>Mathematics</option>
+                                    <option>Literature</option>
+                                    <option>History</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="reqBookType">Type</label>
+                                <select id="reqBookType">
+                                    <option value="offline">Physical / Offline</option>
+                                    <option value="online">Online / eBook</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="reqBookNote">Additional Note</label>
+                            <textarea id="reqBookNote" rows="3" placeholder="Any additional information..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-blue btn-lg">
+                                <i class="fas fa-paper-plane"></i> Submit Request
+                            </button>
+                        </div>
+                        <div id="requestMsg" class="request-msg hidden"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: ONLINE BOOKS ===== -->
+            <div id="section-online" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-desktop"></i>
+                        <h2>Online eBooks</h2>
+                    </div>
+                    <p class="section-desc">Read or download digital books from the library collection.</p>
+                    <div class="books-icon-grid" id="onlineBooksGrid">
+                        <div class="books-loading"><i class="fas fa-spinner fa-spin"></i> Loading books...</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ===== SECTION: FINES ===== -->
+            <div id="section-fines" class="page-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-coins"></i>
+                        <h2>My Fines</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Book Name</th>
+                                    <th>Days Overdue</th>
+                                    <th>Fine Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="empty-row">No fines found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: PROFILE ===== -->
+            <div id="section-profile" class="page-section">
+
+                <!-- Profile Info Card -->
+                <div class="section-card profile-section">
+                    <div class="section-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h2>My Profile</h2>
+                    </div>
+                    <div class="profile-body">
+                        <div class="profile-avatar-wrap">
+                            <img id="profilePagePic"
+                                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                alt="Profile"
+                                onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';">
+                            <span id="profileStatusBadge" class="profile-status-badge">Student</span>
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-field">
+                                <span class="field-label"><i class="fas fa-user"></i> Full Name</span>
+                                <span class="field-value" id="pName">—</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="field-label"><i class="fas fa-envelope"></i> Email</span>
+                                <span class="field-value" id="pEmail">—</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="field-label"><i class="fas fa-id-badge"></i> Roll Number</span>
+                                <span class="field-value" id="pRoll">—</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="field-label"><i class="fas fa-building"></i> Department</span>
+                                <span class="field-value" id="pDept">—</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="field-label"><i class="fas fa-layer-group"></i> Semester</span>
+                                <span class="field-value" id="pSem">—</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="field-label"><i class="fas fa-calendar-alt"></i> Member Since</span>
+                                <span class="field-value" id="pJoined">—</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Update Password trigger -->
+                    <div class="profile-card-actions">
+                        <button class="btn btn-outline-blue" id="showChangePwBtn">
+                            <i class="fas fa-lock"></i> Update Password
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Change Password Card (hidden by default) -->
+                <div class="section-card" id="changePwCard" style="display:none;">
+                    <div class="section-header">
+                        <i class="fas fa-lock"></i>
+                        <h2>Change Password</h2>
+                    </div>
+                    <p class="section-desc">Update your account password. You will need to enter your current password
+                        to confirm.</p>
+                    <form class="request-form" id="changePasswordForm" autocomplete="off">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cpCurrent">Current Password <span class="required">*</span></label>
+                                <div class="input-pw-wrap">
+                                    <input type="password" id="cpCurrent" placeholder="Enter current password" required
+                                        autocomplete="current-password">
+                                    <button type="button" class="toggle-pw" data-target="cpCurrent"><i
+                                            class="fas fa-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cpNew">New Password <span class="required">*</span></label>
+                                <div class="input-pw-wrap">
+                                    <input type="password" id="cpNew" placeholder="Min. 6 characters" required
+                                        autocomplete="new-password">
+                                    <button type="button" class="toggle-pw" data-target="cpNew"><i
+                                            class="fas fa-eye"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cpConfirm">Confirm New Password <span class="required">*</span></label>
+                                <div class="input-pw-wrap">
+                                    <input type="password" id="cpConfirm" placeholder="Repeat new password" required
+                                        autocomplete="new-password">
+                                    <button type="button" class="toggle-pw" data-target="cpConfirm"><i
+                                            class="fas fa-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-blue btn-lg" id="cpSubmitBtn">
+                                <i class="fas fa-key"></i> Update Password
+                            </button>
+                        </div>
+                        <div id="cpMsg" class="request-msg hidden"></div>
+                    </form>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const DEFAULT_AVATAR = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStudentProfile();
+            initNav();
+            initProfileAvatarClick();
+            initRequestForm();
+            fetchOfflineBooks();
+            fetchOnlineBooks();
+        });
+
+        // ---- FETCH PROFILE ----
+        async function fetchStudentProfile() {
+            try {
+                const response = await fetch('./api/get_student_profile.php');
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    if (response.status === 401) window.location.href = './login.html';
+                    return;
+                }
+                populateDashboard(result.data);
+            } catch (e) {
+                console.error('Error fetching profile:', e);
+            }
+        }
+
+        function populateDashboard(user) {
+            const fullName = `${user.first_name} ${user.last_name}`;
+            const picUrl = user.profile_picture ? user.profile_picture : DEFAULT_AVATAR;
+
+            // Header
+            document.getElementById('welcomeName').textContent = `Welcome, ${fullName}`;
+            document.getElementById('welcomeMeta').textContent = `${user.department.toUpperCase()} | Semester ${user.semester}`;
+
+            // Header avatar
+            const headerPic = document.getElementById('profileAvatar');
+            headerPic.src = picUrl;
+            headerPic.onerror = () => { headerPic.onerror = null; headerPic.src = DEFAULT_AVATAR; };
+
+            // Profile page
+            const pagePic = document.getElementById('profilePagePic');
+            pagePic.src = picUrl;
+            pagePic.onerror = () => { pagePic.onerror = null; pagePic.src = DEFAULT_AVATAR; };
+
+            document.getElementById('pName').textContent = fullName;
+            document.getElementById('pEmail').textContent = user.email;
+            document.getElementById('pRoll').textContent = user.roll_no;
+            document.getElementById('pDept').textContent = user.department.toUpperCase();
+            document.getElementById('pSem').textContent = `Semester ${user.semester}`;
+            document.getElementById('profileStatusBadge').textContent = user.status.charAt(0).toUpperCase() + user.status.slice(1);
+            document.getElementById('profileStatusBadge').className = `profile-status-badge status-${user.status}`;
+
+            if (user.created_at) {
+                const d = new Date(user.created_at);
+                document.getElementById('pJoined').textContent = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+            }
+        }
+
+        // ---- SECTION NAVIGATION ----
+        function initNav() {
+            document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+                item.addEventListener('click', e => {
+                    e.preventDefault();
+                    navigateTo(item.dataset.section);
+                });
+            });
+        }
+
+        function navigateTo(section) {
+            // Highlight nav
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navEl = document.querySelector(`.nav-item[data-section="${section}"]`);
+            if (navEl) navEl.classList.add('active');
+
+            // Show section
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            const sectionEl = document.getElementById(`section-${section}`);
+            if (sectionEl) sectionEl.classList.add('active');
+        }
+
+        // ---- PROFILE AVATAR CLICK ----
+        function initProfileAvatarClick() {
+            // Attach to the wrapper div so clicking image OR overlay both work
+            document.querySelector('.header-avatar').addEventListener('click', () => {
+                navigateTo('profile');
+            });
+        }
+
+        // ---- UPDATE PASSWORD BUTTON ----
+        document.getElementById('showChangePwBtn').addEventListener('click', () => {
+            const card = document.getElementById('changePwCard');
+            if (card.style.display === 'none' || card.style.display === '') {
+                card.style.display = 'block';
+                // Smooth scroll to the form
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Update button state
+                document.getElementById('showChangePwBtn').innerHTML =
+                    '<i class="fas fa-times"></i> Cancel';
+            } else {
+                card.style.display = 'none';
+                document.getElementById('changePasswordForm').reset();
+                document.getElementById('cpMsg').className = 'request-msg hidden';
+                document.getElementById('showChangePwBtn').innerHTML =
+                    '<i class="fas fa-lock"></i> Update Password';
+            }
+        });
+
+        // Reset the change password card when navigating away from profile
+        const _origNavigateTo = navigateTo;
+        navigateTo = function (section) {
+            _origNavigateTo(section);
+            if (section !== 'profile') {
+                const card = document.getElementById('changePwCard');
+                if (card) card.style.display = 'none';
+                const btn = document.getElementById('showChangePwBtn');
+                if (btn) btn.innerHTML = '<i class="fas fa-lock"></i> Update Password';
+            }
+        };
+
+        // ---- REQUEST FORM ----
+        function initRequestForm() {
+            document.getElementById('requestBookForm').addEventListener('submit', e => {
+                e.preventDefault();
+                const title = document.getElementById('reqBookTitle').value.trim();
+                const msgEl = document.getElementById('requestMsg');
+                if (!title) return;
+                msgEl.className = 'request-msg success';
+                msgEl.textContent = `✅ Your request for "${title}" has been submitted to the librarian.`;
+                document.getElementById('requestBookForm').reset();
+                setTimeout(() => { msgEl.className = 'request-msg hidden'; }, 5000);
+            });
+        }
+
+        // ---- COVER COLORS pool ----
+        const COVER_COLORS = ['#3a7bd5', '#e05c47', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#0ea5e9', '#f97316'];
+        function pickColor(index) { return COVER_COLORS[index % COVER_COLORS.length]; }
+
+        // ---- FETCH OFFLINE BOOKS ----
+        async function fetchOfflineBooks() {
+            const grid = document.getElementById('offlineBooksGrid');
+            try {
+                const res = await fetch('./api/get_offline_books.php');
+                const result = await res.json();
+                if (!result.success || !result.data.length) {
+                    grid.innerHTML = '<p class="books-empty"><i class="fas fa-box-open"></i> No offline books available yet.</p>';
+                    return;
+                }
+                window.offlineBooksList = result.data;
+                grid.innerHTML = result.data.map((book, i) => {
+                    // Support common column names: title/book_name/name, author/book_author,
+                    // category/subject, availability/status/is_available
+                    const title = book.title || book.book_name || book.name || 'Untitled';
+                    const author = book.author || book.book_author || book.writer || 'Unknown Author';
+                    const category = book.category || book.subject || book.genre || 'General';
+                    const avail = book.availability || book.status || book.is_available || '';
+                    const isAvail = /avail|yes|1|true/i.test(String(avail));
+                    const color = pickColor(i);
+                    const coverContent = book.book_image
+                        ? `<img src="./${escHtml(book.book_image)}" class="book-cover-img" alt="Cover">`
+                        : `<i class="fas fa-book"></i>`;
+                    return `
+                        <div class="book-icon-card">
+                            <div class="book-icon-cover" style="--cover-color:${color};">
+                                ${coverContent}
+                            </div>
+                            <div class="book-icon-info">
+                                <span class="book-availability ${isAvail ? 'avail' : 'unavail'}" style="position:static; display:inline-block; margin-bottom:10px;">${isAvail ? 'Available' : 'Issued'}</span>
+                                <span class="book-category-tag" style="display:inline-block; margin-bottom:10px;">${escHtml(category)}</span>
+                                <h4>${escHtml(title)}</h4>
+                                <p class="book-author"><i class="fas fa-user-pen"></i> ${escHtml(author)}</p>
+                                ${isAvail
+                            ? `<button class="btn btn-blue btn-sm" onclick="showBookDetails(${i})">Get Details</button>`
+                            : `<button class="btn btn-outline-blue btn-sm" disabled>Unavailable</button>`
+                        }
+                            </div>
+                        </div>`;
+                }).join('');
+            } catch (e) {
+                grid.innerHTML = '<p class="books-empty"><i class="fas fa-exclamation-triangle"></i> Failed to load books.</p>';
+                console.error(e);
+            }
+        }
+
+        // ---- FETCH ONLINE BOOKS ----
+        async function fetchOnlineBooks() {
+            const grid = document.getElementById('onlineBooksGrid');
+            try {
+                const res = await fetch('./api/get_online_books.php');
+                const result = await res.json();
+                if (!result.success || !result.data.length) {
+                    grid.innerHTML = '<p class="books-empty"><i class="fas fa-box-open"></i> No online books available yet.</p>';
+                    return;
+                }
+                grid.innerHTML = result.data.map((book, i) => {
+                    const title = book.title || book.book_name || book.name || 'Untitled';
+                    const author = book.author || book.book_author || book.writer || 'Unknown Author';
+                    const category = book.category || book.subject || book.genre || 'General';
+                    const fileUrl = book.file_url || book.file || book.link || book.url || '#';
+                    const fileType = book.file_type || book.type || '';
+                    const isPdf = /pdf/i.test(fileType);
+                    const color = pickColor(i);
+                    const typeTag = isPdf ? 'PDF' : (fileType ? escHtml(fileType.toUpperCase()) : 'eBook');
+                    const iconClass = isPdf ? 'fa-file-pdf' : 'fa-file-alt';
+                    const coverContent = book.book_image
+                        ? `<img src="./${escHtml(book.book_image)}" class="book-cover-img" alt="Cover">`
+                        : `<i class="fas ${iconClass}"></i>`;
+                    return `
+                        <div class="book-icon-card">
+                            <div class="book-icon-cover" style="--cover-color:${color};">
+                                ${coverContent}
+                                <span class="book-etype-tag">${typeTag}</span>
+                            </div>
+                            <div class="book-icon-info">
+                                <span class="book-category-tag">${escHtml(category)}</span>
+                                <h4>${escHtml(title)}</h4>
+                                <p class="book-author"><i class="fas fa-user-pen"></i> ${escHtml(author)}</p>
+                                <div class="book-actions-row">
+                                    <a href="./${fileUrl}" target="_blank" class="btn btn-blue btn-sm">
+                                        <i class="fas fa-book-open"></i> Read
+                                    </a>
+                                    <a href="./${fileUrl}" download class="btn btn-outline-blue btn-sm">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>`;
+                }).join('');
+            } catch (e) {
+                grid.innerHTML = '<p class="books-empty"><i class="fas fa-exclamation-triangle"></i> Failed to load books.</p>';
+                console.error(e);
+            }
+        }
+
+        // ---- HELPER: escape HTML ----
+        function escHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+
+        // ---- CHANGE PASSWORD ----
+        document.addEventListener('DOMContentLoaded', () => {
+            // Password show/hide toggles
+            document.querySelectorAll('.toggle-pw').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const input = document.getElementById(btn.dataset.target);
+                    const icon = btn.querySelector('i');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.replace('fa-eye', 'fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.replace('fa-eye-slash', 'fa-eye');
+                    }
+                });
+            });
+
+            // Submit change password
+            document.getElementById('changePasswordForm').addEventListener('submit', async e => {
+                e.preventDefault();
+                const msgEl = document.getElementById('cpMsg');
+                const btn = document.getElementById('cpSubmitBtn');
+
+                const current = document.getElementById('cpCurrent').value;
+                const newPw = document.getElementById('cpNew').value;
+                const confirm = document.getElementById('cpConfirm').value;
+
+                if (newPw !== confirm) {
+                    msgEl.className = 'request-msg error';
+                    msgEl.textContent = '❌ New passwords do not match.';
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+                try {
+                    const fd = new FormData();
+                    fd.append('current_password', current);
+                    fd.append('new_password', newPw);
+                    fd.append('confirm_password', confirm);
+
+                    const res = await fetch('./api/change_password.php', { method: 'POST', body: fd });
+                    const result = await res.json();
+
+                    if (result.success) {
+                        msgEl.className = 'request-msg success';
+                        msgEl.textContent = '✅ ' + result.message;
+                        document.getElementById('changePasswordForm').reset();
+                    } else {
+                        msgEl.className = 'request-msg error';
+                        msgEl.textContent = '❌ ' + result.message;
+                    }
+                } catch (err) {
+                    msgEl.className = 'request-msg error';
+                    msgEl.textContent = '❌ Network error. Please try again.';
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-key"></i> Update Password';
+                    setTimeout(() => { msgEl.className = 'request-msg hidden'; }, 6000);
+                }
+            });
+        });
+    </script>
+
+    <!-- Book Details Modal -->
+    <div id="bookDetailsModal" class="modal-overlay">
+        <div class="modal-content book-modal">
+            <span class="close-modal" id="closeBookModal"><i class="fas fa-times"></i></span>
+            <div class="book-modal-header">
+                <div class="modal-book-cover" id="modalBookCover"></div>
+                <div class="modal-book-title-area">
+                    <span class="book-category-tag" id="modalBookCategory"></span>
+                    <h2 id="modalBookTitle">Book Title</h2>
+                    <p class="book-author"><i class="fas fa-user-pen"></i> <span id="modalBookAuthor">Author Name</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="book-modal-body">
+                <div class="modal-info-grid" style="grid-template-columns: 1fr;">
+                    <div class="info-item">
+                        <span class="info-label">Shelf Location</span>
+                        <span class="info-value" id="modalBookShelf">N/A</span>
+                    </div>
+                </div>
+
+                <div class="book-description-area">
+                    <h3>Description</h3>
+                    <p id="modalBookDesc">No description available for this book.</p>
+                </div>
+
+                <div class="modal-actions" style="justify-content: space-between; align-items: center;">
+                    <span class="book-availability avail" id="modalBookStatus"
+                        style="position:static; margin:0;">Available</span>
+                    <button class="btn btn-outline-blue btn-lg" id="modalCloseBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global function to show offline book details
+        function showBookDetails(index) {
+            const book = window.offlineBooksList[index];
+            if (!book) return;
+
+            const modal = document.getElementById('bookDetailsModal');
+
+            // Populate data safely
+            const title = book.title || book.book_name || book.name || 'Untitled';
+            const author = book.author || book.book_author || book.writer || 'Unknown Author';
+            const category = book.category || book.subject || book.genre || 'General';
+            const isbn = book.isbn || 'N/A';
+            const shelf = book.shelf_location || book.shelf_no || book.shelf || 'Not Assigned';
+            const desc = book.description || 'No description available for this book.';
+            const isAvail = /avail|yes|1|true/i.test(String(book.availability || book.status || ''));
+            const image = book.book_image || book.image || '';
+
+            document.getElementById('modalBookTitle').textContent = title;
+            document.getElementById('modalBookAuthor').textContent = author;
+            document.getElementById('modalBookCategory').textContent = category;
+            document.getElementById('modalBookShelf').textContent = shelf;
+            document.getElementById('modalBookDesc').textContent = desc;
+
+            const statusEl = document.getElementById('modalBookStatus');
+            statusEl.textContent = isAvail ? 'Available' : 'Issued';
+            statusEl.className = `book-availability ${isAvail ? 'avail' : 'unavail'}`;
+
+            const coverEl = document.getElementById('modalBookCover');
+            if (image) {
+                coverEl.innerHTML = `<img src="./${escHtml(image)}" alt="Cover">`;
+            } else {
+                coverEl.innerHTML = `<i class="fas fa-book"></i>`;
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        // Close modal listeners
+        document.getElementById('closeBookModal').addEventListener('click', () => {
+            document.getElementById('bookDetailsModal').style.display = 'none';
+        });
+        document.getElementById('modalCloseBtn').addEventListener('click', () => {
+            document.getElementById('bookDetailsModal').style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('bookDetailsModal');
+            if (e.target === modal) modal.style.display = 'none';
+        });
+
+        // --- SESSION TIMEOUT CHECKER ---
+        // Poll the server every 60 seconds to see if the session has expired due to 1 hour of inactivity
+        setInterval(async () => {
+            try {
+                const res = await fetch('./api/check_session.php');
+                if (res.status === 401) {
+                    alert('⏳ Your session has expired due to 1 hour of inactivity. Please log in again.');
+                    window.location.href = './login.html';
+                }
+            } catch (err) {
+                // Ignore network errors for background polls
+                console.error("Session check failed", err);
+            }
+        }, 60000);
+    </script>
+</body>
+
+</html>

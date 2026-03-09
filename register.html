@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — College Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/register.css">
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Create Account 🎓</div>
+            <div class="card-subtitle">Register as a Student — College Library</div>
+        </div>
+
+        <div class="form-notes">
+            <div class="form-notes-title">Please Note:</div>
+            <ul class="form-notes-list">
+                <li>Fields marked with <span class="required-asterisk">*</span> are
+                    compulsory.</li>
+                <li>Max 2MB profile image allowed.</li>
+                <li>Please wait 1 or 2 working days for admin approval after registration.</li>
+            </ul>
+        </div>
+
+        <!-- Profile Picture -->
+        <div class="avatar-wrap">
+            <div class="avatar-circle" id="avatarCircle" title="Click to upload photo">
+                <input type="file" id="profileInput" accept="image/*" onchange="previewAvatar(this)">
+                <span id="avatarEmoji">📷</span>
+                <img id="avatarPreview" alt="Preview">
+            </div>
+            <div class="avatar-label">Upload Profile Photo (optional)</div>
+        </div>
+
+        <!-- Name row -->
+        <div class="row-2">
+            <div class="field">
+                <label>First Name <span style="color:var(--red);">*</span></label>
+                <div class="input-wrap">
+                    <input type="text" id="first_name" placeholder="Rahul" autocomplete="given-name" required
+                        onkeydown="enterSubmit(event)">
+                </div>
+            </div>
+            <div class="field">
+                <label>Last Name (Optional)</label>
+                <div class="input-wrap">
+                    <input type="text" id="last_name" placeholder="Sharma" autocomplete="family-name"
+                        onkeydown="enterSubmit(event)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Roll No -->
+        <div class="field">
+            <label>Roll Number <span style="color:var(--red);">*</span></label>
+            <div class="input-wrap">
+                <input type="text" id="roll_no" placeholder="e.g. CSE2024001" onkeydown="enterSubmit(event)">
+            </div>
+        </div>
+
+        <!-- Branch & Sem -->
+        <div class="row-2">
+            <div class="field">
+                <label>Department / Branch <span style="color:var(--red);">*</span></label>
+                <div class="input-wrap">
+                    <select id="department">
+                        <option value="">-- Select --</option>
+                        <option>Computer Science (CSE)</option>
+                        <option>Electronics (ECE)</option>
+                        <option>Mechanical (ME)</option>
+                        <option>Civil (CE)</option>
+                        <option>Electrical (EE)</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Semester <span style="color:var(--red);">*</span></label>
+                <div class="input-wrap">
+                    <select id="semester">
+                        <option value="">-- Select --</option>
+                        <option value="1">1st Semester</option>
+                        <option value="2">2nd Semester</option>
+                        <option value="3">3rd Semester</option>
+                        <option value="4">4th Semester</option>
+                        <option value="5">5th Semester</option>
+                        <option value="6">6th Semester</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field">
+            <label>Email Address <span style="color:var(--red);">*</span></label>
+            <div class="input-wrap">
+                <input type="email" id="email" placeholder="you@college.edu" autocomplete="email"
+                    onkeydown="enterSubmit(event)">
+            </div>
+        </div>
+
+        <!-- Security Question -->
+        <div class="row-2">
+            <div class="field">
+                <label>Security Question <span class="required-asterisk">*</span></label>
+                <div class="input-wrap">
+                    <select id="security_question">
+                        <option value="">-- Select a Question --</option>
+                        <option value="What is your favorite teacher's name?">What is your favorite teacher's name?
+                        </option>
+                        <option value="What is your hometown?">What is your hometown?</option>
+                        <option value="What was your first school name?">What was your first school name?</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Security Answer <span class="required-asterisk">*</span></label>
+                <div class="input-wrap">
+                    <input type="text" id="security_answer" placeholder="Your Answer" onkeydown="enterSubmit(event)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+            <label>Password <span style="color:var(--red);">*</span></label>
+            <div class="input-wrap">
+                <input type="password" id="password" placeholder="Create a strong password"
+                    oninput="checkStrength(this.value)" onkeydown="enterSubmit(event)">
+                <span class="eye" onclick="togglePass('password', this)">👁️</span>
+            </div>
+            <div class="strength-bar">
+                <span id="sb1"></span><span id="sb2"></span><span id="sb3"></span><span id="sb4"></span>
+            </div>
+            <div class="strength-label" id="strengthLabel">Enter a password</div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="field">
+            <label>Confirm Password <span style="color:var(--red);">*</span></label>
+            <div class="input-wrap">
+                <input type="password" id="confirm_password" placeholder="Repeat your password"
+                    onkeydown="enterSubmit(event)">
+                <span class="eye" onclick="togglePass('confirm_password', this)">👁️</span>
+            </div>
+        </div>
+
+        <button class="btn-primary" id="submitBtn" onclick="handleRegister(this)">
+            Create My Account 🚀
+        </button>
+
+        <div class="card-footer">
+            Already have an account? <a href="./login.html">Sign in →</a>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        function previewAvatar(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.getElementById('avatarPreview');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                document.getElementById('avatarEmoji').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function togglePass(id, btn) {
+            const inp = document.getElementById(id);
+            const hidden = inp.type === 'password';
+            inp.type = hidden ? 'text' : 'password';
+            btn.textContent = hidden ? '🙈' : '👁️';
+        }
+
+        function checkStrength(val) {
+            const bars = ['sb1', 'sb2', 'sb3', 'sb4'].map(id => document.getElementById(id));
+            const label = document.getElementById('strengthLabel');
+            let score = 0;
+            if (val.length >= 6) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+            const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e'];
+            const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+            bars.forEach((b, i) => {
+                b.style.background = i < score ? colors[score - 1] : '#e2e8f0';
+            });
+            label.textContent = val.length === 0 ? 'Enter a password' : (labels[score - 1] || 'Weak');
+            label.style.color = val.length === 0 ? '#94a3b8' : colors[Math.max(0, score - 1)];
+        }
+
+        function enterSubmit(e) {
+            if (e.key === 'Enter') document.getElementById('submitBtn').click();
+        }
+
+        function showToast(msg, color) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.background = color || '#1e293b';
+            t.classList.add('show');
+            setTimeout(() => { t.classList.remove('show'); t.style.background = ''; }, 3500);
+        }
+
+        function handleRegister(btn) {
+            // Ripple
+            const r = document.createElement('span');
+            r.className = 'ripple';
+            r.style.width = r.style.height = '120px';
+            r.style.left = '50%'; r.style.top = '50%';
+            btn.appendChild(r);
+            setTimeout(() => r.remove(), 700);
+
+            const first_name = document.getElementById('first_name').value.trim();
+            const last_name = document.getElementById('last_name').value.trim();
+            const roll_no = document.getElementById('roll_no').value.trim();
+            const department = document.getElementById('department').value;
+            const semester = document.getElementById('semester').value;
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirm_password = document.getElementById('confirm_password').value;
+            const profileFile = document.getElementById('profileInput').files[0];
+            const security_question = document.getElementById('security_question').value;
+            const security_answer = document.getElementById('security_answer').value.trim();
+
+            // Validation
+            if (!first_name) { showToast('⚠️ Please enter your first name.', '#f97316'); return; }
+            if (!roll_no) { showToast('⚠️ Roll number is required.', '#f97316'); return; }
+            if (!department) { showToast('⚠️ Please select a department.', '#f97316'); return; }
+            if (!semester) { showToast('⚠️ Please select your semester.', '#f97316'); return; }
+            if (!email) { showToast('⚠️ Email is required.', '#f97316'); return; }
+            if (!security_question) { showToast('⚠️ Please select a security question.', '#f97316'); return; }
+            if (!security_answer) { showToast('⚠️ Please answer the security question.', '#f97316'); return; }
+            if (!password) { showToast('⚠️ Password is required.', '#f97316'); return; }
+            if (password.length < 6) { showToast('⚠️ Password must be at least 6 characters.', '#f97316'); return; }
+            if (password !== confirm_password) { showToast('❌ Passwords do not match.', '#ef4444'); return; }
+
+            btn.disabled = true;
+            btn.textContent = 'Creating account…';
+
+            const formData = new FormData();
+            formData.append('first_name', first_name);
+            formData.append('last_name', last_name);
+            formData.append('roll_no', roll_no);
+            formData.append('department', department);
+            formData.append('semester', semester);
+            formData.append('email', email);
+            formData.append('security_question', security_question);
+            formData.append('security_answer', security_answer);
+            formData.append('password', password);
+            formData.append('confirm_password', confirm_password);
+            if (profileFile) formData.append('profile_picture', profileFile);
+
+            fetch('./api/register.php', { method: 'POST', body: formData })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('✅ Account created! Redirecting to status tracker…', '#22c55e');
+                        setTimeout(() => { window.location.href = `./status_check.html?roll_no=${encodeURIComponent(roll_no)}`; }, 2000);
+                    } else {
+                        showToast('❌ ' + (data.message || 'Registration failed.'), '#ef4444');
+                        btn.disabled = false;
+                        btn.textContent = 'Create My Account 🚀';
+                    }
+                })
+                .catch(() => {
+                    showToast('❌ Network error. Please try again.', '#ef4444');
+                    btn.disabled = false;
+                    btn.textContent = 'Create My Account 🚀';
+                });
+        }
+    </script>
+</body>
+
+</html>
